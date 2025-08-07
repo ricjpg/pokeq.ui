@@ -1,3 +1,5 @@
+console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+
 export default {
-  URL: "http://localhost:8000",
+  URL: process.env.NEXT_PUBLIC_API_URL,
 };

@@ -36,6 +36,8 @@ export default function ReportsTable({
   const [selectedId, setSelectedId] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const [limit, setLimit] = useState(10);
+
   // Ordenar los reportes cuando cambian o cuando cambia la dirección de ordenamiento
   useEffect(() => {
     if (!reports || reports.length === 0) {

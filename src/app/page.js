@@ -12,6 +12,7 @@ import ReportsTable from "@/components/reports-table";
 import { getPokemonTypes } from "@/services/pokemon-service";
 import { getReports, createReport } from "@/services/report-service";
 import { deleteReport } from "@/services/report-service";
+import * as Label from "@radix-ui/react-label";
 
 export default function PokemonReportsPage() {
   const [pokemonTypes, setPokemonTypes] = useState([]);
@@ -21,6 +22,7 @@ export default function PokemonReportsPage() {
   const [creatingReport, setCreatingReport] = useState(false);
   const [error, setError] = useState(null);
   const [selectedType, setSelectedType] = useState("");
+  const [limit, setLimit] = useState(10);
 
   // Cargar los tipos de Pokémon
   useEffect(() => {
@@ -85,7 +87,7 @@ export default function PokemonReportsPage() {
       setCreatingReport(true);
 
       // Crear un nuevo reporte usando la API
-      await createReport(selectedType);
+      await createReport(selectedType, limit);
 
       // Mostrar notificación de éxito
       toast.success(
@@ -152,6 +154,22 @@ export default function PokemonReportsPage() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 loading={loadingTypes}
+              />
+            </div>
+            <div className="flex gap-2">
+              <Label.Root
+                htmlFor="limit-input"
+                className="text-md font-medium text-gray-800"
+              >
+                Max Pokémons
+              </Label.Root>
+              <input
+                id="limit-input"
+                type="number"
+                value={limit}
+                onChange={(e) => setLimit(Number(e.target.value))}
+                className="border rounded px-2 py-1 w-20 text-sm"
+                min={1}
               />
             </div>
             <div className="w-full md:w-1/3">
