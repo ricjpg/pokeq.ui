@@ -23,6 +23,20 @@ export default function PokemonReportsPage() {
   const [error, setError] = useState(null);
   const [selectedType, setSelectedType] = useState("");
   const [limit, setLimit] = useState(10);
+  const [inputValue, setInputValue] = useState(limit.toString());
+  const [isValid, setIsValid] = useState(true);
+
+  const handleLimitChange = (e) => {
+    const value = e.target.value;
+    const isValidNumber = /^\d+$/.test(value) && Number(value) >= 0;
+
+    setInputValue(value);
+    setIsValid(isValidNumber);
+
+    if (isValidNumber) {
+      setLimit(Number(value));
+    }
+  };
 
   // Cargar los tipos de Pokémon
   useEffect(() => {
@@ -156,26 +170,28 @@ export default function PokemonReportsPage() {
                 loading={loadingTypes}
               />
             </div>
-            <div className="flex gap-2">
-              <Label.Root
-                htmlFor="limit-input"
-                className="text-md font-medium text-gray-800"
-              >
-                Max Pokémons
-              </Label.Root>
+            <div className="flex w-full place-content-end self-end">
+              <p className="px-2">Ingresa el tamaño de la muestra: </p>
               <input
                 id="limit-input"
-                type="number"
-                value={limit}
-                onChange={(e) => setLimit(Number(e.target.value))}
-                className="border rounded px-2 py-1 w-20 text-sm"
-                min={1}
+                type="text"
+                value={inputValue}
+                onChange={handleLimitChange}
+                className={`border rounded px-2 py-1 w-20 text-sm ${
+                  isValid
+                    ? "border-gray-300 focus:border-blue-500"
+                    : "border-red-500 bg-red-50"
+                }`}
+                min={0}
+                placeholder="0"
               />
             </div>
             <div className="w-full md:w-1/3">
               <Button
                 onClick={catchThemAll}
-                disabled={!selectedType || isLoading || creatingReport}
+                disabled={
+                  !selectedType || isLoading || creatingReport || !isValid
+                }
                 className="w-full font-bold"
               >
                 {creatingReport
